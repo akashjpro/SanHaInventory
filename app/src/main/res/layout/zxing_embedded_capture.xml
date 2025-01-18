@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- Khu vực hiển thị camera -->
+    <FrameLayout
+        android:id="@+id/zxing_camera_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Thanh hướng dẫn -->
+    <TextView
+        android:id="@+id/zxing_status_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#80000000"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Hãy căn mã vạch trong khung để quét"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+    <!-- Khung ngắm -->
+    <View
+        android:id="@+id/zxing_viewfinder_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@drawable/custom_viewfinder" />
+
+    <!-- Nút bật/tắt đèn pin -->
+    <Button
+        android:id="@+id/zxing_flash_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_flashlight"
+        android:contentDescription="Bật/tắt đèn pin" />
+
+</RelativeLayout>
