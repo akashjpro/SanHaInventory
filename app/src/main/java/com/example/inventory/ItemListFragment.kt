@@ -100,6 +100,23 @@ class ItemListFragment : Fragment() {
 
         }
 
+        binding.iBntCopyAllIItem.setOnClickListener {
+
+            if(listItem.isNotEmpty()) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val stringBuilder = StringBuilder()
+                    listItem.map { it.index }.forEach {
+                        stringBuilder.append("\n$it")
+                    }
+                    val copyContent = stringBuilder.toString() // Chuyển StringBuilder thành String
+                    if(copyContent.isNotEmpty()) {
+                        copyToClipboard(requireContext(), copyContent)
+                    }
+
+                }
+            }
+        }
+
         binding.iBntCopyAll.setOnClickListener {
 
             if(listItem.isNotEmpty()) {

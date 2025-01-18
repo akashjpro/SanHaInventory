@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
+
 //        val navView: BottomNavigationView = binding.navView
 
         val appBarConfiguration = AppBarConfiguration(
@@ -506,7 +508,7 @@ class MainActivity : AppCompatActivity() {
                                         index = "",
                                         isFormat = true,
                                         inStock = formatEnd.toString() + " | " + it.inStock ,
-                                        brcch = NumberUtils.formatNumberPrice(price) + " | " + it.brcch.replace("VND", "") + " VND",
+                                        brcch = NumberUtils.formatNumberPrice(price) + " |" + it.brcch.replace("VND", "") + "  VND",
                                         barCode = intentResult.contents,
                                         isScan = true,
                                         timestamp = System.currentTimeMillis()
@@ -614,28 +616,27 @@ class MainActivity : AppCompatActivity() {
                 for (row in sheet) {
                     if (row.rowNum == 0) continue // Bỏ qua hàng tiêu đề
 
-                    val index = row.getCell(0)?.toString() ?: ""
+                    val index = row.getCell(0)?.toString()?.trim() ?: ""
                     val description = row.getCell(1)?.toString() ?: ""
                     val inStock = row.getCell(2)?.toString() ?: ""
-                    val barCode = row.getCell(3)?.toString() ?: ""
+                    val barCode = row.getCell(3)?.toString()?.trim() ?: ""
                     val group = row.getCell(4)?.toString() ?: ""
                     val lastPurchase = row.getCell(8)?.toString() ?: ""
                     val brcch = row.getCell(9)?.toString() ?: ""
 
-//            println("index: $index")
-//            println("description: $description")
-//            println("inStock: $inStock")
+            println("index: $index")
+            println("description: $description")
+            println("inStock: $inStock")
                     println("barCode: $barCode")
-                    println("barCode: ${barCode.toString()}")
-//            println("group: $group")
-//            println("lastPurchase: $lastPurchase")
-//            println("brcch: $brcch")
+            println("group: $group")
+            println("lastPurchase: $lastPurchase")
+            println("brcch: $brcch")
 
 
-                    val resultBarCode =
-                        if (barCode.length > 3) barCode.substring(0, barCode.length - 3)
+                    var resultBarCode =
+                        if (barCode.length > 13) barCode.substring(0, barCode.length - 3)
                             .replace(".", "")
-                            .trim() else ""
+                            .trim() else barCode
                     val resultLastPurchase =
                         if (lastPurchase.length > 3) lastPurchase.replace("VND", "")
                             .trim() + "  VND" else ""

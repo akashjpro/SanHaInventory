@@ -53,6 +53,18 @@
 
     </LinearLayout>
 
+    <ImageButton
+        android:layout_marginTop="0dp"
+        android:background="@color/white"
+        android:id="@+id/iBntCopyAllIItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_copy_all_24"
+        app:layout_constraintEnd_toStartOf="@+id/iBntCopyAll"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider"/>
+
 
     <ImageButton
         android:layout_marginTop="8dp"
