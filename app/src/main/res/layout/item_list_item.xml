@@ -76,6 +76,23 @@
             app:layout_constraintTop_toBottomOf="@id/item_price"
             app:layout_constraintBottom_toTopOf="@+id/divider"/>
 
+<!--    <TextView-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="normal"-->
+<!--        android:id="@+id/item_id"-->
+<!--        android:layout_marginStart="@dimen/margin_between_elements"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="sans-serif-medium"-->
+<!--        android:textAlignment="center"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintHorizontal_chainStyle="packed"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/item_quantity"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/divider"/>-->
+
     <TextView
         android:textColor="@android:color/black"
         android:textSize="14sp"
@@ -122,6 +139,17 @@
            app:layout_constraintStart_toEndOf="@+id/item_quantity"
            app:layout_constraintTop_toBottomOf="@id/item_price"
            app:layout_constraintBottom_toTopOf="@+id/divider"/>
+
+<!--    <ImageButton-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:id="@+id/iBntCopyItem"-->
+<!--        android:background="@color/zxing_transparent"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/baseline_content_copy_24"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/item_id"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/item_quantity"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/divider"/>-->
 
 
         <View

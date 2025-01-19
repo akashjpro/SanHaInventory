@@ -58,7 +58,7 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
      * Updates an existing Item in the database.
      */
     fun updateItem(
-        itemId: Int,
+        itemId: Long,
         itemName: String,
         itemPrice: String,
         itemCount: String
@@ -169,7 +169,7 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
     /**
      * Retrieve an item from the repository.
      */
-    fun retrieveItem(id: Int): LiveData<Item> {
+    fun retrieveItem(id: Long): LiveData<Item> {
         return itemDao.getItem(id).asLiveData()
     }
 
@@ -201,7 +201,7 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
      * Returns an instance of the [Item] entity class with the item info updated by the user.
      */
     private fun getUpdatedItemEntry(
-        itemId: Int,
+        itemId: Long,
         itemName: String,
         itemPrice: String,
         itemCount: String

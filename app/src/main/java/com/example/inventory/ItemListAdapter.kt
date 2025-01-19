@@ -75,6 +75,7 @@ class ItemListAdapter(private val context: Context, private val listItem: List<I
             }
             binding.itemPrice.text =  price
             binding.itemQuantity.text = item.barCode
+//            binding.itemId.text = item.index
             binding.itemUom.text = item.uom
             binding.itemInStock.text = item.inStock
             binding.itemTime.text = DateUtils.convertMillisToDateModern(item.timestamp)
@@ -84,6 +85,12 @@ class ItemListAdapter(private val context: Context, private val listItem: List<I
                 }
 
             }
+//            binding.iBntCopyItem.setOnClickListener {
+//                if (item.index.isNotEmpty()) {
+//                    copyToClipboard(context, item.barCode)
+//                }
+//
+//            }
             if (isEnd) {
                 binding.itemEnd.visibility = View.VISIBLE
             } else {

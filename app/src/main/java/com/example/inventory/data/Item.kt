@@ -26,7 +26,7 @@ import java.text.NumberFormat
 @Entity
 data class Item(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     @ColumnInfo(name = "index")
     val index: String = "",
     @ColumnInfo(name = "name")

@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_item_detail">
         <argument
             android:name="item_id"
-            app:argType="integer" />
+            app:argType="long" />
         <action
             android:id="@+id/action_itemDetailFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
@@ -53,8 +53,7 @@
             app:argType="string" />
         <argument
             android:name="item_id"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            app:argType="long"/>
         <action
             android:id="@+id/action_addItemFragment_to_itemListFragment"
             app:destination="@id/itemListFragment"

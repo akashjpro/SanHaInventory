@@ -496,16 +496,10 @@ class MainActivity : AppCompatActivity() {
 
                                // Toast.makeText(this@MainActivity, "price : $price", Toast.LENGTH_SHORT).show()
 
-                                // Lấy đối tượng có id lớn nhất
-                                val maxItem = listItem.maxByOrNull { it.id }
-                                var id = -1
-                                if(maxItem != null) {
-                                    id =  maxItem.id  + 1
-                                }
                                 viewModel.addItem(
                                     it.copy(
-                                        id =  id  + 1,
-                                        index = "",
+                                        id =  System.currentTimeMillis(),
+                                        index = index + " | "+System.currentTimeMillis().toString(),
                                         isFormat = true,
                                         inStock = formatEnd.toString() + " | " + it.inStock ,
                                         brcch = NumberUtils.formatNumberPrice(price) + " |" + it.brcch.replace("VND", "") + "  VND",
@@ -517,13 +511,29 @@ class MainActivity : AppCompatActivity() {
                             }
 
                         } else {
-                            viewModel.addItem(
-                                Item(
-                                    isScan = true,
-                                    barCode = intentResult.contents,
-                                    timestamp = System.currentTimeMillis()
+                            if (intentResult.contents.length == 8) {
+                                val index = intentResult.contents
+                                val item = listItem.find { it.index == index}
+                                item?.let {
+                                    viewModel.deleteItem(it)
+                                    viewModel.addItem(
+                                        it.copy(
+                                            barCode = intentResult.contents,
+                                            isScan = true,
+                                            timestamp = System.currentTimeMillis()
+                                        )
+                                    )
+                                }
+
+                            } else {
+                                viewModel.addItem(
+                                    Item(
+                                        isScan = true,
+                                        barCode = intentResult.contents,
+                                        timestamp = System.currentTimeMillis()
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 } else {

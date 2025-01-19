@@ -102,6 +102,10 @@ class ItemListFragment : Fragment() {
 
         binding.iBntCopyAllIItem.setOnClickListener {
 
+            listItem.forEach {
+                println("Item: ${it.index}")
+            }
+
             if(listItem.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val stringBuilder = StringBuilder()
