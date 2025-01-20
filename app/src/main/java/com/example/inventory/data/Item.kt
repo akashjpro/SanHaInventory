@@ -28,7 +28,7 @@ data class Item(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     @ColumnInfo(name = "index")
-    val index: String = "",
+    val index: String = "N/A",
     @ColumnInfo(name = "name")
     val itemName: String = "N/A",
     @ColumnInfo(name = "uom")

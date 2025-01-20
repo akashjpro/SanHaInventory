@@ -74,8 +74,8 @@ class ItemListAdapter(private val context: Context, private val listItem: List<I
                 price = NumberUtils.formatNumberPrice(item.brcch.replace("VND","").replace(",", "").trim()) + " VND"
             }
             binding.itemPrice.text =  price
-            binding.itemQuantity.text = item.barCode
-//            binding.itemId.text = item.index
+            binding.itemBarCode.text = item.barCode
+            binding.itemId.text = if (item.index.length >= 8) item.index.substring(0, 8) else "N/A"
             binding.itemUom.text = item.uom
             binding.itemInStock.text = item.inStock
             binding.itemTime.text = DateUtils.convertMillisToDateModern(item.timestamp)
@@ -85,12 +85,12 @@ class ItemListAdapter(private val context: Context, private val listItem: List<I
                 }
 
             }
-//            binding.iBntCopyItem.setOnClickListener {
-//                if (item.index.isNotEmpty()) {
-//                    copyToClipboard(context, item.barCode)
-//                }
-//
-//            }
+            binding.iBntCopyItem.setOnClickListener {
+                if (item.index.isNotEmpty()) {
+                    copyToClipboard(context, if (item.index.length >= 8) item.index.substring(0, 8) else "")
+                }
+
+            }
             if (isEnd) {
                 binding.itemEnd.visibility = View.VISIBLE
             } else {

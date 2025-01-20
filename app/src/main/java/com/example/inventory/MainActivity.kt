@@ -466,8 +466,6 @@ class MainActivity : AppCompatActivity() {
 
             if (intentResult != null) {
                 if (intentResult.contents != null) {
-//                    Toast.makeText(this, "Scanned: ${intentResult.contents}", Toast.LENGTH_LONG)
-//                        .show()
 
                     val item = listItem.find { it.barCode == intentResult.contents }
                     if (item != null) {
@@ -479,7 +477,6 @@ class MainActivity : AppCompatActivity() {
                                 timestamp = System.currentTimeMillis()
                             )
                         )
-                        //Toast.makeText(this, "Updated successfully", Toast.LENGTH_LONG).show()
                     } else {
                         if (intentResult.contents.length == 16) {
                             val index = intentResult.contents.substring(2, 10)
@@ -502,7 +499,7 @@ class MainActivity : AppCompatActivity() {
                                         index = index + " | "+System.currentTimeMillis().toString(),
                                         isFormat = true,
                                         inStock = formatEnd.toString() + " | " + it.inStock ,
-                                        brcch = NumberUtils.formatNumberPrice(price) + " |" + it.brcch.replace("VND", "") + "  VND",
+                                        brcch = NumberUtils.formatNumberPrice(price) + " | " +  NumberUtils.formatNumberPrice(it.brcch.replace("VND","").replace(",", "").trim() )+ "  VND",
                                         barCode = intentResult.contents,
                                         isScan = true,
                                         timestamp = System.currentTimeMillis()
@@ -605,18 +602,6 @@ class MainActivity : AppCompatActivity() {
             // Lấy InputStream từ URI
             val inputStream: InputStream? = contentResolver.openInputStream(uri)
             if (inputStream != null) {
-//                val workbook = XSSFWorkbook(inputStream)
-//                val sheet = workbook.getSheetAt(0)
-//
-//                // Đọc từng dòng dữ liệu từ Excel
-//                for (row in sheet) {
-//                    val rowData = mutableListOf<String>()
-//                    for (cell in row) {
-//                        rowData.add(cell.toString())
-//                    }
-//                    // Hiển thị từng dòng dữ liệu trong Logcat
-//                    Log.d("ExcelRow", rowData.joinToString(", "))
-//                }
                 val itemList = mutableListOf<Item>()
 
                 // Dùng WorkbookFactory để đọc file Excel
@@ -626,15 +611,15 @@ class MainActivity : AppCompatActivity() {
                 for (row in sheet) {
                     if (row.rowNum == 0) continue // Bỏ qua hàng tiêu đề
 
-                    val index = row.getCell(0)?.toString()?.trim() ?: ""
+                    val index = row.getCell(0)?.toString()?.trim() ?: "N/A"
                     val description = row.getCell(1)?.toString() ?: ""
-                    val inStock = row.getCell(2)?.toString() ?: ""
+                    val inStock = ""
                     val barCode = row.getCell(3)?.toString()?.trim() ?: ""
                     val group = row.getCell(4)?.toString() ?: ""
                     val lastPurchase = row.getCell(8)?.toString() ?: ""
                     val brcch = row.getCell(9)?.toString() ?: ""
 
-            println("index: $index")
+            println("index99999999: $index")
             println("description: $description")
             println("inStock: $inStock")
                     println("barCode: $barCode")

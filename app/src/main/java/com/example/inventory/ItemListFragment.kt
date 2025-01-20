@@ -109,7 +109,7 @@ class ItemListFragment : Fragment() {
             if(listItem.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val stringBuilder = StringBuilder()
-                    listItem.map { it.index }.forEach {
+                    listItem.map { if (it.index.length >= 8) it.index.substring(0, 8) else "" }.forEach {
                         stringBuilder.append("\n$it")
                     }
                     val copyContent = stringBuilder.toString() // Chuyển StringBuilder thành String
