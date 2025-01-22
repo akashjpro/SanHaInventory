@@ -90,12 +90,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.allItems.observe(this) { items ->
             items?.let {
                 listItem = it
+                viewModel.updateItemList(it)
             }
         }
 
@@ -296,7 +299,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun performSearch(query: String) {
 
-        viewModel.updateQuery(query)
+        viewModel.search(query)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

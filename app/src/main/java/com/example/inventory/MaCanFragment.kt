@@ -15,12 +15,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.inventory.data.Item
 import com.example.inventory.databinding.ItemListFragmentBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.Normalizer
@@ -43,7 +52,6 @@ class MaCanFragment : Fragment() {
     private var copyContent:  String = ""
     private var listItem = listOf<Item>()
 
-    private var indexSelectedSpinner:  Int = 0
 
 
 
@@ -74,7 +82,8 @@ class MaCanFragment : Fragment() {
         binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
                 // Get the selected value
-                indexSelectedSpinner = position
+
+                viewModel.updateIndexSelected(position)
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>) {
@@ -82,7 +91,7 @@ class MaCanFragment : Fragment() {
             }
         }
 
-        val adapter = ItemListAdapter(requireContext(), listItem) {
+        val adapter = ItemAdapter(requireContext(), listItem) {
             val action =
                 ItemListFragmentDirections.actionItemListFragmentToItemDetailFragment(it.id)
             this.findNavController().navigate(action)
@@ -91,38 +100,44 @@ class MaCanFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         // Attach an observer on the allItems list to update the UI automatically when the data
         // changes.
-        viewModel.allItems.observe(this.viewLifecycleOwner) { items ->
-            items?.let {
-                adapter.submitList(it)
-                binding.txtSum.text = it.size.toString()
-                listItem = it
+//        viewModel.allItems.observe(this.viewLifecycleOwner) { items ->
+//            items?.let {
+//                adapter.submitData(it)
+//                binding.txtSum.text = it.size.toString()
+//                listItem = it
+//            }
+//        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.items.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
             }
         }
 
-        viewModel.query.observe(this.viewLifecycleOwner) { query ->
-            CoroutineScope(Dispatchers.IO).launch {
-                query?.let {
-                    if(query.isNotEmpty()) {
-                        // Thực hiện tìm kiếm (ví dụ: lọc danh sách hoặc gọi API)
-                        // val filteredList = listItem.filter { removeVietnameseAccents(it.itemName).contains(query, ignoreCase = true) }
-                        val filteredList = searchItems(query, listItem)
-                        withContext(Dispatchers.Main) {
-                            adapter.submitList(filteredList)
-                            binding.txtSum.text = filteredList.size.toString()
-                        }
-
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            adapter.submitList(listItem)
-                            binding.txtSum.text = listItem.size.toString()
-                        }
-                    }
-
-                }
-            }
-
-
-        }
+//        viewModel.query.observe(this.viewLifecycleOwner) { query ->
+//            CoroutineScope(Dispatchers.IO).launch {
+//                query?.let {
+//                    if(query.isNotEmpty()) {
+//                        // Thực hiện tìm kiếm (ví dụ: lọc danh sách hoặc gọi API)
+//                        // val filteredList = listItem.filter { removeVietnameseAccents(it.itemName).contains(query, ignoreCase = true) }
+//                        val filteredList = searchItems(query, listItem)
+//                        withContext(Dispatchers.Main) {
+//                            adapter.submitList(filteredList)
+//                            binding.txtSum.text = filteredList.size.toString()
+//                        }
+//
+//                    } else {
+//                        withContext(Dispatchers.Main) {
+//                            adapter.submitList(listItem)
+//                            binding.txtSum.text = listItem.size.toString()
+//                        }
+//                    }
+//
+//                }
+//            }
+//
+//
+//        }
 
         binding.iBntCopyAllIItem.setOnClickListener {
 
@@ -162,6 +177,8 @@ class MaCanFragment : Fragment() {
             }
         }
 
+        binding.txtSum.text = viewModel.getListItemSize().toString()
+
     }
     // Hàm copy chuỗi vào clipboard
     private suspend fun copyToClipboard(context: Context, text: String) {
@@ -176,18 +193,18 @@ class MaCanFragment : Fragment() {
     }
 
 
-    fun removeVietnameseAccents(input: String): String {
-        val normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
-        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
-    }
-
-    fun searchItems(keyword: String, items: List<Item>): List<Item> {
-        val normalizedKeyword = removeVietnameseAccents(keyword).lowercase()
-        return items.filter {
-            val normalizedItem =    if (indexSelectedSpinner == 0) removeVietnameseAccents(it.itemName).lowercase() else removeVietnameseAccents(it.index).lowercase()
-            normalizedItem.contains(normalizedKeyword)
-        }
-    }
+//    fun removeVietnameseAccents(input: String): String {
+//        val normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
+//        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
+//    }
+//
+//    fun searchItems(keyword: String, items: List<Item>): List<Item> {
+//        val normalizedKeyword = removeVietnameseAccents(keyword).lowercase()
+//        return items.filter {
+//            val normalizedItem =    if (indexSelectedSpinner == 0) removeVietnameseAccents(it.itemName).lowercase() else removeVietnameseAccents(it.index).lowercase()
+//            normalizedItem.contains(normalizedKeyword)
+//        }
+//    }
 
 
 }

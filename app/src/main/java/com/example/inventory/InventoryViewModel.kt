@@ -23,8 +23,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.example.inventory.data.Item
 import com.example.inventory.data.ItemDao
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -42,6 +49,44 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
     // Public LiveData để quan sát, không thể thay đổi từ bên ngoài
     val query: LiveData<String> get() = _query
 
+    private var listItem = listOf<Item>()
+
+    private val searchQuery = MutableStateFlow("")
+
+    private val indexSelectedSpinner = MutableStateFlow(0)
+
+    fun search(query: String) {
+        searchQuery.value = query
+    }
+
+    fun updateIndexSelected(index: Int) {
+        indexSelectedSpinner.value = index
+    }
+
+//    val items = searchQuery
+//        .debounce(300) // Chống spam tìm kiếm
+//        .flatMapLatest { query ->
+//            Pager(PagingConfig(pageSize = 20)) {
+//                ItemPagingSource(listItem, query)
+//            }.flow
+//        }
+//        .cachedIn(viewModelScope)
+
+    val items = combine(
+        indexSelectedSpinner,
+        searchQuery.debounce(300) // Thêm debounce 300ms vào query
+    ) { index, query ->
+        Pager(PagingConfig(pageSize = 20)) {
+            ItemPagingSource(listItem, query, index)
+        }.flow
+    }.flatMapLatest { it }
+        .cachedIn(viewModelScope)
+
+    fun updateItemList(items: List<Item>){
+        listItem = items
+    }
+
+    fun getListItemSize()  = listItem.size
 
     // Hàm thay đổi giá trị của query
     fun updateQuery(newQuery: String) {
