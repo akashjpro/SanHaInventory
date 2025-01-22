@@ -587,7 +587,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun formatNumberToDouble(input: String): Double {
         println("formatEnd_START: $input")
-        val result = "0.${input.substring(1)}".toDouble()
+        val result = "${input.substring(0, 1)}.${input.substring(1)}".toDouble()
         println("formatEnd_END: $input")
         return result
     }
