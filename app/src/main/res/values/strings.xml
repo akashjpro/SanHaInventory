@@ -38,8 +38,8 @@
     <string name="action_kiem_ke">Nạp dữ liệu File Kiểm Kê </string>
     <string name="action_delete_all">Xoá tất cả dữ liệu</string>
     <string name="action_delete_all_scan">Xoá tất cả sản phẩm đã scan</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Scans</string>
+    <string name="title_dashboard">Tất Cả Item</string>
     <string name="title_scan">Scan</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Mã Cân</string>
 </resources>

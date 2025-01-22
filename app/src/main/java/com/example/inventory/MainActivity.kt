@@ -48,6 +48,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.InputStream
 import android.Manifest
 import android.text.TextUtils.split
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import java.text.DecimalFormat
 import java.text.Normalizer
@@ -98,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-//        val navView: BottomNavigationView = binding.navView
+
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -106,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-//        // Retrieve NavController from the NavHostFragment
+        // Retrieve NavController from the NavHostFragment
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -114,9 +117,48 @@ class MainActivity : AppCompatActivity() {
 //        val navController = findNavController(R.id.nav_host_fragment)
 
         // Set up the action bar for use with the NavController
-        setupActionBarWithNavController(this, navController)
+        setupActionBarWithNavController(this,  navController, appBarConfiguration)
 
-//        navView.setupWithNavController(navController)
+
+
+        binding.navView.setupWithNavController(navController)
+
+
+        binding.navView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_home -> {
+                    navController.navigate(R.id.itemListFragment)
+                    true
+                }
+                R.id.navigation_dashboard -> {
+                    navController.navigate(R.id.maCanFragment)
+                    true
+                }
+                R.id.navigation_notifications -> {
+                    navController.navigate(R.id.listAllItem)
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.itemListFragment,
+                R.id.listAllItem,
+                R.id.maCanFragment -> {
+                    // Ẩn nút Back Button khi ở các tab chính
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                }
+                else -> {
+                    // Hiển thị nút Back Button khi không ở tab chính
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+            }
+        }
 
         binding.floatingActionButton.setOnClickListener {
             startScanning()
@@ -203,6 +245,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -465,6 +508,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             if (intentResult != null) {
+                navController.navigate(R.id.itemListFragment)
                 if (intentResult.contents != null) {
 
                     val item = listItem.find { it.barCode == intentResult.contents }

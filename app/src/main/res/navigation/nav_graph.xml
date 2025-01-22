@@ -60,4 +60,14 @@
             app:popUpTo="@id/itemListFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/listAllItem"
+        android:name="com.example.inventory.ListAllItem"
+        android:label="Mã Cân"
+        tools:layout="@layout/fragment_list_all_item_list" />
+    <fragment
+        android:id="@+id/maCanFragment"
+        android:name="com.example.inventory.MaCanFragment"
+        android:label="Danh Sách Sản Phẩm"
+        tools:layout="@layout/fragment_ma_can" />
 </navigation>
