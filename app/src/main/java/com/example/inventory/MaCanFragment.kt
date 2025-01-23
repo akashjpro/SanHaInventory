@@ -27,6 +27,7 @@ import com.example.inventory.databinding.ItemListFragmentBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
@@ -69,7 +70,7 @@ class MaCanFragment : Fragment() {
 
 
         // List of items for the spinner
-        val items = listOf("Theo tên", "Theo id")
+        val items = listOf("Tìm theo tên", "Tìm theo mã item")
 
         // Creating an ArrayAdapter to display the items in the spinner
         val adapterSpinner = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, items)
@@ -110,9 +111,22 @@ class MaCanFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.items.collectLatest { pagingData ->
+
                 adapter.submitData(pagingData)
             }
+
+
         }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.itemList.collectLatest { list ->
+                withContext(Dispatchers.Main) {
+                    binding.txtSum.text = list.size.toString()
+                }
+
+            }
+        }
+        
 
 //        viewModel.query.observe(this.viewLifecycleOwner) { query ->
 //            CoroutineScope(Dispatchers.IO).launch {
@@ -176,8 +190,6 @@ class MaCanFragment : Fragment() {
                 }
             }
         }
-
-        binding.txtSum.text = viewModel.getListItemSize().toString()
 
     }
     // Hàm copy chuỗi vào clipboard

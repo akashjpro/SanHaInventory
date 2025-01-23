@@ -7,13 +7,13 @@ import java.text.Normalizer
 
 class ItemPagingSource(
     private val originalList: List<Item>,
-    private val query: String,
-    private var indexSelectedSpinner:  Int = 0
+//    private val query: String,
+//    private var indexSelectedSpinner:  Int = 0
 ) : PagingSource<Int, Item>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item> {
         val page = params.key ?: 0
         val pageSize = params.loadSize
-        val filteredList = searchItems(query, originalList)
+        val filteredList = originalList
         val start = page * pageSize
         val end = minOf(start + pageSize, filteredList.size)
 
@@ -35,17 +35,17 @@ class ItemPagingSource(
         }
     }
 
-    fun searchItems(keyword: String, items: List<Item>): List<Item> {
-        val normalizedKeyword = removeVietnameseAccents(keyword).lowercase()
-        return items.filter {
-            val normalizedItem =    if (indexSelectedSpinner == 0) removeVietnameseAccents(it.itemName).lowercase() else removeVietnameseAccents(it.index).lowercase()
-            normalizedItem.contains(normalizedKeyword)
-        }
-    }
-
-    fun removeVietnameseAccents(input: String): String {
-        val normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
-        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
-    }
+//    fun searchItems(keyword: String, items: List<Item>): List<Item> {
+//        val normalizedKeyword = removeVietnameseAccents(keyword).lowercase()
+//        return items.filter {
+//            val normalizedItem =  if (indexSelectedSpinner == 0) removeVietnameseAccents(it.itemName).lowercase() else removeVietnameseAccents(it.index).lowercase()
+//            normalizedItem.contains(normalizedKeyword)
+//        }
+//    }
+//
+//    fun removeVietnameseAccents(input: String): String {
+//        val normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
+//        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
+//    }
 
 }

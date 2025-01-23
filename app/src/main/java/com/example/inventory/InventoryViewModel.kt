@@ -29,10 +29,12 @@ import androidx.paging.cachedIn
 import com.example.inventory.data.Item
 import com.example.inventory.data.ItemDao
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 
 /**
  * View Model to keep a reference to the Inventory repository and an up-to-date list of all items.
@@ -50,10 +52,14 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
     val query: LiveData<String> get() = _query
 
     private var listItem = listOf<Item>()
+    private val _itemList = MutableStateFlow<List<Item>>(emptyList())
+    val itemList: StateFlow<List<Item>> get() = _itemList
 
     private val searchQuery = MutableStateFlow("")
 
     private val indexSelectedSpinner = MutableStateFlow(0)
+
+
 
     fun search(query: String) {
         searchQuery.value = query
@@ -77,7 +83,9 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
         searchQuery.debounce(300) // Thêm debounce 300ms vào query
     ) { index, query ->
         Pager(PagingConfig(pageSize = 20)) {
-            ItemPagingSource(listItem, query, index)
+            val originalList =  searchItems(query, listItem, index)
+            _itemList.value = originalList
+            ItemPagingSource(originalList)
         }.flow
     }.flatMapLatest { it }
         .cachedIn(viewModelScope)
@@ -257,6 +265,19 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
             itemPrice = itemPrice.toDouble(),
             quantityInStock = itemCount.toInt()
         )
+    }
+
+    fun searchItems(keyword: String, items: List<Item>,  indexSelectedSpinner:  Int = 0): List<Item> {
+        val normalizedKeyword = removeVietnameseAccents(keyword).lowercase()
+        return items.filter {
+            val normalizedItem =  if (indexSelectedSpinner == 0) removeVietnameseAccents(it.itemName).lowercase() else removeVietnameseAccents(it.index).lowercase()
+            normalizedItem.contains(normalizedKeyword)
+        }
+    }
+
+    fun removeVietnameseAccents(input: String): String {
+        val normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
+        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
     }
 }
 
