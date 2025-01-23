@@ -69,5 +69,9 @@
         android:id="@+id/maCanFragment"
         android:name="com.example.inventory.MaCanFragment"
         android:label="Danh Sách Sản Phẩm"
-        tools:layout="@layout/fragment_ma_can" />
+        tools:layout="@layout/fragment_ma_can" >
+        <action
+            android:id="@+id/action_maCanFragment_to_itemDetailFragment"
+            app:destination="@id/itemDetailFragment" />
+    </fragment>
 </navigation>

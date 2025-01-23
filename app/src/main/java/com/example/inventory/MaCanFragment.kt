@@ -93,7 +93,7 @@ class MaCanFragment : Fragment() {
 
         val adapter = ItemAdapter(requireContext(), listItem) {
             val action =
-                ItemListFragmentDirections.actionItemListFragmentToItemDetailFragment(it.id)
+                MaCanFragmentDirections.actionMaCanFragmentToItemDetailFragment(it.id)
             this.findNavController().navigate(action)
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(this.context)
